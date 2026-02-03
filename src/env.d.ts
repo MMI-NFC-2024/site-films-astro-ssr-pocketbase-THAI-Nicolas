@@ -1,7 +1,9 @@
 import type { TypesPocketBase } from "./pocketbase-types";
 
-declare namespace App {
-  interface Locals {
-    pb: TypesPocketBase;
+declare global {
+  namespace App {
+    interface Locals {
+      pb: TypesPocketBase;
+    }
   }
 }

@@ -1,0 +1,17 @@
+---
+import Layout from "../../layouts/Layout.astro"
+const personnes = await Astro.locals.pb.collection("personnes").getFullList()
+---
+
+<Layout titre="Les personnes" description="Page regroupant toutes les personnes">
+    <h1>les personnes</h1>
+    <ul>
+        {
+            personnes.map((personne) => (
+                <li>
+                    <a href="">{personne.nom}</a>
+                </li>
+            ))
+        }
+    </ul>
+</Layout>
