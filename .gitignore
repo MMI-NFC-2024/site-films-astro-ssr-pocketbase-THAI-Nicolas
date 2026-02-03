@@ -24,4 +24,5 @@ pnpm-debug.log*
 .idea/
 
 # backend
-backend/*
+backend/pocketbase/*
+!backend/pocketbase/pb_migrations/
