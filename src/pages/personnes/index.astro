@@ -1,4 +1,5 @@
 ---
+import LinkPersonne from "../../components/LinkPersonne.astro"
 import Layout from "../../layouts/Layout.astro"
 const personnes = await Astro.locals.pb.collection("personnes").getFullList()
 ---
@@ -9,7 +10,7 @@ const personnes = await Astro.locals.pb.collection("personnes").getFullList()
         {
             personnes.map((personne) => (
                 <li>
-                    <a href="">{personne.nom}</a>
+                    <LinkPersonne personne={personne} />
                 </li>
             ))
         }
