@@ -33,7 +33,7 @@ if (Astro.request.method === "POST") {
     {message && <p class="text-red-500">{message}</p>}
     <form method="post">
 
-        { id && <input type="hidden" name="id" value={id}> }
+        { id && <input type="hidden" name="id" value={id}/> }
 
         <input type="hidden" name="user" value={Astro.locals.pb.authStore.record?.id}>
 

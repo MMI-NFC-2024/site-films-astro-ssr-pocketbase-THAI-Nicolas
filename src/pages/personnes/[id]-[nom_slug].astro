@@ -2,6 +2,10 @@
 import { Debug } from "astro:components";
 import Layout from "../../layouts/Layout.astro";
 
+interface Props {
+    id:string
+}
+
 const { id } = Astro.params ;
 const personne = await Astro.locals.pb.collection("personnes").getOne(id) ;
 

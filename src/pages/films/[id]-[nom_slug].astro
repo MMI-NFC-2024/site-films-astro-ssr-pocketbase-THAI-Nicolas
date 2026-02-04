@@ -1,0 +1,18 @@
+---
+import { Debug } from "astro:components";
+import Layout from "../../layouts/Layout.astro"
+
+const { id } = Astro.params
+const film = await Astro.locals.pb.collection("films").getOne(id!);
+---
+
+<Layout>
+    <h1>Affichage du film {film.titre}</h1>
+    <Debug film={film} />
+    
+    {
+        Astro.locals.pb.authStore.record?.id === film.user && 
+        <a href={`/films/edit/${film.id}`}> Modifier le film </a>
+    }
+
+</Layout>

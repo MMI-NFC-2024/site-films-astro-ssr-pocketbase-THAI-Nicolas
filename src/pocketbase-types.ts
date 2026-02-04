@@ -11,6 +11,7 @@ export enum Collections {
 	Mfas = "_mfas",
 	Otps = "_otps",
 	Superusers = "_superusers",
+	Films = "films",
 	Personnes = "personnes",
 	Users = "users",
 }
@@ -93,6 +94,18 @@ export type SuperusersRecord = {
 	verified?: boolean
 }
 
+export type FilmsRecord = {
+	created: IsoAutoDateString
+	date_sortie?: IsoDateString
+	duree_min?: number
+	id: string
+	personnes?: RecordIdString[]
+	synopsis?: HTMLString
+	titre?: string
+	updated: IsoAutoDateString
+	user?: RecordIdString
+}
+
 export enum PersonnesProfessionOptions {
 	"acteur" = "acteur",
 	"réalisateur" = "réalisateur",
@@ -111,6 +124,7 @@ export type PersonnesRecord = {
 	date_de_deces?: IsoDateString
 	date_de_naissance?: IsoDateString
 	id: string
+	img?: FileNameString
 	nationalite?: PersonnesNationaliteOptions
 	nom?: string
 	prenom?: string
@@ -138,6 +152,7 @@ export type ExternalauthsResponse<Texpand = unknown> = Required<ExternalauthsRec
 export type MfasResponse<Texpand = unknown> = Required<MfasRecord> & BaseSystemFields<Texpand>
 export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemFields<Texpand>
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
+export type FilmsResponse<Texpand = unknown> = Required<FilmsRecord> & BaseSystemFields<Texpand>
 export type PersonnesResponse<Texpand = unknown> = Required<PersonnesRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
@@ -149,6 +164,7 @@ export type CollectionRecords = {
 	_mfas: MfasRecord
 	_otps: OtpsRecord
 	_superusers: SuperusersRecord
+	films: FilmsRecord
 	personnes: PersonnesRecord
 	users: UsersRecord
 }
@@ -159,6 +175,7 @@ export type CollectionResponses = {
 	_mfas: MfasResponse
 	_otps: OtpsResponse
 	_superusers: SuperusersResponse
+	films: FilmsResponse
 	personnes: PersonnesResponse
 	users: UsersResponse
 }

@@ -1,0 +1,64 @@
+---
+import Layout from "../../../layouts/Layout.astro"
+import type { FilmsResponse } from "../../../pocketbase-types";
+import { formatDate } from "../../../utilitaires";
+
+const { id } = Astro.params;
+let message = null;
+let film = {} as FilmsResponse;
+if (id) {
+    film = await Astro.locals.pb.collection("films").getOne(id);
+}
+if (Astro.request.method === "POST") {
+    const data = await Astro.request.formData();
+    const filmCree = await (id
+            ?(Astro.locals.pb.collection("films").update(id!, data))
+            :(Astro.locals.pb.collection("films").create(data))
+        )
+        .catch(err => {
+            console.error("Erreur de sauvegarde du film : ", err);
+            message = err.message ;
+            return null
+        })
+    ;
+    if (filmCree) {
+        return Astro.redirect(`/films/${filmCree.id}-${slug(filmCree.titre ?? "Inconnu")}`)
+    }
+}
+---
+
+<Layout>
+    <h1>Ajouter un nouveau film</h1>
+    {message && <p class="text-red-500">{message}</p>}
+    
+    <form method="post">
+        {id && <input type="hidden" name="id" value={id} />}
+
+        <input type="hidden" name="user" value={Astro.locals.pb.authStore.record?.id}>
+
+        <label class="block">
+            <span>Titre :</span>
+            <input type="text" name="titre" value={film.titre} class="mt-1 block w-full" placeholder="Choisir un titre du film">
+        </label>
+
+        <label class="block">
+            <span>Durée (min) :</span>
+            <input type="number" name="duree_min" value={film.duree_min} class="mt-1 block w-full" placeholder="Choisir une durée">
+        </label>
+
+        <label class="block">
+            <span>Synopsis :</span>
+            <input type="text" name="synopsis" value={film.synopsis} class="mt-1 block w-full" placeholder="">
+        </label>
+
+        <label class="block">
+            <span>Date de sortie :</span>
+            <input type="date" name="date_sortie" value={formatDate(film.date_sortie)} class="mt-1 block w-full" placeholder="">
+        </label>
+
+        <button>
+            { id ? "Mettre à jour" : "Ajouter"}
+        </button>
+
+    </form>
+</Layout>
