@@ -2,8 +2,10 @@
 import { Debug } from "astro:components";
 import Layout from "../../layouts/Layout.astro"
 
-const { id } = Astro.params
-const film = await Astro.locals.pb.collection("films").getOne(id!);
+const { id } = Astro.params as {
+    id:string
+}
+const film = await Astro.locals.pb.collection("films").getOne(id);
 ---
 
 <Layout>

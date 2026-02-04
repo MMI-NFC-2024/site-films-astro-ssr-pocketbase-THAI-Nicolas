@@ -10,4 +10,4 @@ const film = Astro.props.film;
 
 ---
 
-<a href={`/personnes/${film.id}-${slug(film.titre ?? "Inconnu")}`}>{film.titre}</a>
+<a href={`/films/${film.id}-${slug(film.titre ?? "Inconnu")}`}>{film.titre}</a>

@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro"
 import type { FilmsResponse } from "../../../pocketbase-types";
 import { formatDate } from "../../../utilitaires";
+import slug from "slug";
 
 const { id } = Astro.params;
 let message = null;

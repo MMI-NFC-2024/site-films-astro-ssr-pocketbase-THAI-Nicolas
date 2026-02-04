@@ -100,7 +100,7 @@ export type FilmsRecord = {
 	duree_min?: number
 	id: string
 	personnes?: RecordIdString[]
-	synopsis?: HTMLString
+	synopsis?: string
 	titre?: string
 	updated: IsoAutoDateString
 	user?: RecordIdString
