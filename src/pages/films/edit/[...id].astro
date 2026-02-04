@@ -26,6 +26,8 @@ if (Astro.request.method === "POST") {
         return Astro.redirect(`/films/${filmCree.id}-${slug(filmCree.titre ?? "Inconnu")}`)
     }
 }
+
+const personneListes = await Astro.locals.pb.collection("personnes").getFullList() ;
 ---
 
 <Layout>
@@ -96,6 +98,62 @@ if (Astro.request.method === "POST") {
                             value={formatDate(film.date_sortie)} 
                             class="input input-bordered w-full"
                         />
+                    </div>
+
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text font-semibold">Réalisateurs</span>
+                        </label>
+                        <select name="realisateurs" id="realisateurs" class="select select-bordered w-full h-32">
+                            {
+                                personneListes.map((personne) => (
+                                <option selected={film.realisateurs?.includes(personne.id)} value={personne.id}>
+                                    {personne.prenom} {personne.nom}
+                                </option>
+                                ))
+                            }
+                        </select>
+                        <label class="label">
+                            <span class="label-text-alt">Maintenez Ctrl pour sélectionner plusieurs réalisateurs</span>
+                        </label>
+                    </div>
+
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text font-semibold">Acteurs</span>
+                        </label>
+                        <select name="acteurs" multiple class="select select-bordered w-full h-32">
+                            {
+                                personneListes.map((personne) => (
+                                    <option selected={film.acteurs?.includes(personne.id)} 
+                                    value={personne.id}
+                                    >
+                                        {personne.prenom} {personne.nom}
+                                    </option>
+                                ))}
+                        </select>
+                        <label class="label">
+                            <span class="label-text-alt">Maintenez Ctrl pour sélectionner plusieurs acteurs</span>
+                        </label>
+                    </div>
+
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text font-semibold">Producteurs</span>
+                        </label>
+                        <select name="producteurs" multiple class="select select-bordered w-full h-32">
+                            {
+                                personneListes.map((personne) => (
+                                    <option selected={film.producteurs?.includes(personne.id)} 
+                                    value={personne.id}
+                                    >
+                                        {personne.prenom} {personne.nom}
+                                    </option>
+                                ))}
+                        </select>
+                        <label class="label">
+                            <span class="label-text-alt">Maintenez Ctrl pour sélectionner plusieurs producteurs</span>
+                        </label>
                     </div>
 
                     <div class="card-actions justify-between mt-8">

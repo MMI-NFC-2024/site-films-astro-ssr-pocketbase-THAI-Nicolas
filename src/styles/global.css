@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
 @plugin "daisyui" {
-  themes: "lofi", "dark";
+  themes: "light", "dark";
 }
 
 html {

@@ -95,11 +95,13 @@ export type SuperusersRecord = {
 }
 
 export type FilmsRecord = {
+	acteurs?: RecordIdString[]
 	created: IsoAutoDateString
 	date_sortie?: IsoDateString
 	duree_min?: number
 	id: string
-	personnes?: RecordIdString[]
+	producteurs?: RecordIdString[]
+	realisateurs?: RecordIdString
 	synopsis?: string
 	titre?: string
 	updated: IsoAutoDateString
