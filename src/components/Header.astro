@@ -1,4 +1,63 @@
-<header>
-    <a href="/">Retourner à l'accueil</a>
-    <a href="/authPassword">{Astro.locals.pb.authStore.isValid ? "Se déconnecter" : "Se connecter"}</a>
+<header class="sticky top-0 z-50 bg-base-100 border-b border-base-300 backdrop-blur-sm">
+    <div class="navbar max-w-7xl mx-auto px-4">
+        <div class="flex-1">
+            <a href="/" class="btn btn-ghost text-xl font-bold">Films</a>
+        </div>
+        
+        <div class="flex gap-2 items-center">
+            <a href="/personnes" class="btn btn-ghost btn-sm">Personnes</a>
+            <a href="/films" class="btn btn-ghost btn-sm">Films</a>
+            
+            <div class="divider divider-horizontal h-6 mx-1"></div>
+            
+            <!-- Sélecteur de thème -->
+            <button 
+                id="theme-toggle" 
+                class="btn btn-ghost btn-circle btn-sm"
+                aria-label="Toggle theme"
+            >
+                <svg class="swap-off fill-current w-5 h-5" id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5.64,4.59L3.53,2.48A1,1,0,0,0,2.12,3.88L4.22,5.98a7,7,0,0,0,9.71,9.71l2.1,2.1a1,1,0,1,0,1.41-1.41L15.34,14.6A7,7,0,0,0,5.64,4.59ZM9,13a4,4,0,1,1,4-4A4,4,0,0,1,9,13Z"/></svg>
+                <svg class="swap-on fill-current w-5 h-5" id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            
+            {Astro.locals.pb.authStore.isValid ? (
+                <form method="POST" action="/authPassword" style="display: inline;">
+                    <button type="submit" class="btn btn-primary btn-sm">Déconnexion</button>
+                </form>
+            ) : (
+                <a href="/authPassword" class="btn btn-primary btn-sm">Connexion</a>
+            )}
+        </div>
+    </div>
 </header>
+
+<script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+    
+    function updateThemeIcon() {
+        const currentTheme = htmlElement.getAttribute('data-theme');
+        const sunIcon = document.getElementById('sun-icon') as HTMLElement;
+        const moonIcon = document.getElementById('moon-icon') as HTMLElement;
+        
+        if (currentTheme === 'dark') {
+            if (sunIcon) sunIcon.style.display = 'block';
+            if (moonIcon) moonIcon.style.display = 'none';
+        } else {
+            if (sunIcon) sunIcon.style.display = 'none';
+            if (moonIcon) moonIcon.style.display = 'block';
+        }
+    }
+    
+    themeToggle?.addEventListener('click', () => {
+        const currentTheme = htmlElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        htmlElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon();
+    });
+    
+    // Initialize icon on page load
+    updateThemeIcon();
+</script>

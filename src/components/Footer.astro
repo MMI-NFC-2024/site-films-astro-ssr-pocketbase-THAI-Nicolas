@@ -1,0 +1,32 @@
+<footer class="bg-base-200 border-t border-base-300 mt-16">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <h3 class="font-bold text-lg mb-4">Films</h3>
+                <ul class="space-y-2">
+                    <li><a href="/films" class="link link-hover">Tous les films</a></li>
+                    <li><a href="/personnes" class="link link-hover">Les acteurs</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="font-bold text-lg mb-4">Navigation</h3>
+                <ul class="space-y-2">
+                    <li><a href="/" class="link link-hover">Accueil</a></li>
+                    {Astro.locals.pb.authStore.isValid && (
+                        <li><a href="/films/edit" class="link link-hover">Ajouter un film</a></li>
+                    )}
+                </ul>
+            </div>
+            
+            <div>
+                <h3 class="font-bold text-lg mb-4">À propos</h3>
+                <p class="text-sm opacity-75">Une collection moderne de films et d'acteurs.</p>
+            </div>
+        </div>
+        
+        <div class="border-t border-base-300 pt-8">
+            <p class="text-center text-sm opacity-50">© 2026 Films. Tous droits réservés.</p>
+        </div>
+    </div>
+</footer>

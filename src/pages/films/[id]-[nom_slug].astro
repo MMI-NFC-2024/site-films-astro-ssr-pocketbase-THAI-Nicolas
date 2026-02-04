@@ -1,5 +1,4 @@
 ---
-import { Debug } from "astro:components";
 import Layout from "../../layouts/Layout.astro"
 
 const { id } = Astro.params as {
@@ -9,12 +8,37 @@ const film = await Astro.locals.pb.collection("films").getOne(id);
 ---
 
 <Layout>
-    <h1>Affichage du film {film.titre}</h1>
-    <Debug film={film} />
-    
-    {
-        Astro.locals.pb.authStore.record?.id === film.user && 
-        <a href={`/films/edit/${film.id}`}> Modifier le film </a>
-    }
-
+    <div class="max-w-4xl mx-auto px-4 py-16">
+        <div class="mb-8">
+            <a href="/films" class="link link-hover text-sm">← Retour aux films</a>
+        </div>
+        
+        <div class="space-y-8">
+            <div>
+                <h1 class="text-5xl font-bold mb-4">{film.titre}</h1>
+                <div class="flex gap-4 flex-wrap">
+                    {film.duree_min && (
+                        <div class="badge badge-lg">{film.duree_min} minutes</div>
+                    )}
+                    {film.date_sortie && (
+                        <div class="badge badge-lg">Sorti en {new Date(film.date_sortie).getFullYear()}</div>
+                    )}
+                </div>
+            </div>
+            
+            {film.synopsis && (
+                <div class="bg-base-200 p-8 rounded-lg">
+                    <h2 class="text-2xl font-bold mb-4">Synopsis</h2>
+                    <p class="text-base-content/80 leading-relaxed">{film.synopsis}</p>
+                </div>
+            )}
+            
+            <div class="flex gap-4">
+                {Astro.locals.pb.authStore.record?.id === film.user && (
+                    <a href={`/films/edit/${film.id}`} class="btn btn-primary">Modifier le film</a>
+                )}
+                <a href="/films" class="btn btn-ghost">Voir d'autres films</a>
+            </div>
+        </div>
+    </div>
 </Layout>

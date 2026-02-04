@@ -3,9 +3,47 @@ import Layout from "../layouts/Layout.astro"
 ---
 
 <Layout titre="Accueil">
-	<div class="flex flex-col">
-		<a href="/personnes">Voir les personnes</a>
-		<a href="/films">Voir les Films</a>
+	<div class="max-w-7xl mx-auto px-4 py-16">
+		<!-- Hero Section -->
+		<section class="mb-20">
+			<div class="text-center space-y-6">
+				<h1 class="text-5xl font-bold">Films & Acteurs</h1>
+				<p class="text-xl text-base-content/70 max-w-2xl mx-auto">Explorez une collection complète de films et découvrez les acteurs qui les ont rendus inoubliables.</p>
+				
+				<div class="flex gap-4 justify-center flex-wrap pt-4">
+					<a href="/films" class="btn btn-primary btn-lg">Voir les films</a>
+					<a href="/personnes" class="btn btn-outline btn-lg">Voir les acteurs</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- Stats Section -->
+		<section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+			<div class="card bg-base-200 shadow-sm">
+				<div class="card-body items-center text-center">
+					<div class="text-4xl font-bold text-primary">0</div>
+					<p class="text-base-content/70">Films</p>
+				</div>
+			</div>
+			<div class="card bg-base-200 shadow-sm">
+				<div class="card-body items-center text-center">
+					<div class="text-4xl font-bold text-primary">0</div>
+					<p class="text-base-content/70">Acteurs</p>
+				</div>
+			</div>
+			<div class="card bg-base-200 shadow-sm">
+				<div class="card-body items-center text-center">
+					<div class="text-4xl font-bold text-primary">0</div>
+					<p class="text-base-content/70">Réalisateurs</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- CTA Section -->
+		<section class="bg-base-200 rounded-lg p-12 text-center">
+			<h2 class="text-3xl font-bold mb-4">Vous avez un film à ajouter?</h2>
+			<p class="text-base-content/70 mb-6 max-w-xl mx-auto">Connectez-vous pour contribuer à notre base de données et partager vos films préférés.</p>
+			<a href="/authPassword" class="btn btn-primary">Se connecter</a>
+		</section>
 	</div>
-	
 </Layout>

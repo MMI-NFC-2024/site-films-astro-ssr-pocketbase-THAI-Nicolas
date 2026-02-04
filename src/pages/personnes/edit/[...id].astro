@@ -29,73 +29,101 @@ if (Astro.request.method === "POST") {
 ---
 
 <Layout>
-    <h1>Ajouter une personne</h1>
-    {message && <p class="text-red-500">{message}</p>}
-    <form method="post">
+    <div class="max-w-2xl mx-auto px-4 py-16">
+        <div class="mb-8">
+            <a href="/personnes" class="link link-hover text-sm">← Retour aux acteurs</a>
+        </div>
+        
+        <div class="card bg-base-200">
+            <div class="card-body">
+                <h1 class="card-title text-3xl">{id ? "Modifier la personne" : "Ajouter une nouvelle personne"}</h1>
+                
+                {message && (
+                    <div class="alert alert-error">
+                        <span>{message}</span>
+                    </div>
+                )}
+                
+                <form method="post" class="space-y-6 mt-6">
+                    {id && <input type="hidden" name="id" value={id}/> }
+                    <input type="hidden" name="user" value={Astro.locals.pb.authStore.record?.id}>
 
-        { id && <input type="hidden" name="id" value={id}/> }
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text font-semibold">Prénom</span>
+                            </label>
+                            <input name="prenom" value={personne.prenom} type="text" class="input input-bordered w-full" placeholder="Prénom">
+                        </div>
 
-        <input type="hidden" name="user" value={Astro.locals.pb.authStore.record?.id}>
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text font-semibold">Nom *</span>
+                            </label>
+                            <input name="nom" value={personne.nom} type="text" class="input input-bordered w-full" placeholder="Nom" required>
+                        </div>
+                    </div>
 
-        <label class="block">
-                <span class="text-gray-700">Nom :</span>
-                <input name="nom" value={personne.nom} type="text" class="mt-1 block w-full" placeholder="">
-        </label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text font-semibold">Date de naissance</span>
+                            </label>
+                            <input name="date_de_naissance" value={formatDate(personne.date_de_naissance)} type="date" class="input input-bordered w-full">
+                        </div>
 
-        <label class="block">
-                <span class="text-gray-700">Prénom :</span>
-                <input name="prenom" value={personne.prenom} type="text" class="mt-1 block w-full" placeholder="">
-        </label>
+                        <div class="form-control w-full">
+                            <label class="label">
+                                <span class="label-text font-semibold">Date de décès</span>
+                            </label>
+                            <input name="date_de_deces" value={formatDate(personne.date_de_deces)} type="date" class="input input-bordered w-full">
+                        </div>
+                    </div>
 
-        <label class="block">
-                <span class="text-gray-700">Date de naissance :</span>
-                <input name="date_de_naissance" value={formatDate(personne.date_de_naissance)} type="date" class="mt-1 block w-full" placeholder="">
-        </label>
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text font-semibold">Nationalité</span>
+                        </label>
+                        <select name="nationalite" class="select select-bordered w-full">
+                            <option value="">Choisir une nationalité</option>
+                            {
+                                Object.entries(PersonnesNationaliteOptions).map(([key, value]) => (
+                                    <option selected={value === personne.nationalite}  value={value}>
+                                        {key}
+                                    </option>
+                                ) 
+                            )}
+                        </select>
+                    </div>
 
-        <label class="block">
-                <span class="text-gray-700">Date de décès :</span>
-                <input name="date_de_deces" value={formatDate(personne.date_de_deces)} type="date" class="mt-1 block w-full" placeholder="">
-        </label>
+                    <fieldset class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text font-semibold">Profession</span>
+                        </label>
+                        <div class="space-y-3">
+                            {
+                                Object.entries(PersonnesProfessionOptions).map(([key, value]) =>
+                                    <label class="flex items-center gap-3 cursor-pointer">
+                                        <input type="checkbox" name="profession" value={value}
+                                        checked={personne.profession?.includes(value)}
+                                        class="checkbox checkbox-sm"
+                                        />
+                                        <span class="label-text">{key}</span>
+                                    </label>
+                                )
+                            }
+                        </div>
+                    </fieldset>
 
-       <fieldset>
-        <legend>Profession : </legend>
-           {
-                Object.entries(PersonnesProfessionOptions).map(([key, value]) =>
-                    <label>
-                        <input type="checkbox" name="profession" value={value}
-                        checked={personne.profession?.includes(value)}
-                        />
-                        {key}
-                    </label>
-                )
-            }
-       </fieldset>
-
-        <label class="block">
-                nationalite
-                <select name="nationalite">
-                    <option value="">
-                        Choisir une nationalitée
-                    </option>
-                    {
-                        Object.entries(PersonnesNationaliteOptions).map(([key, value]) => (
-                            <option selected={value === personne.nationalite}  value={value}>
-                                {key}
-                            </option>
-                        ) 
-                    )
-                    }
-                </select>
-        </label>
-
-        {/* <label class="block">
-                <span class="text-gray-700">Image de la personne :</span>
-                <input name="profession" type="" class="mt-1 block w-full" placeholder="">
-        </label> */}
-
-        <button>
-            { id ? "Mettre à jour" : "Ajouter" }
-        </button>
-
-    </form>
+                    <div class="card-actions justify-between mt-8">
+                        <a href="/personnes" class="btn btn-ghost">Annuler</a>
+                        <button type="submit" class="btn btn-primary">
+                            {id ? "Mettre à jour" : "Ajouter"}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</Layout>
 </Layout>

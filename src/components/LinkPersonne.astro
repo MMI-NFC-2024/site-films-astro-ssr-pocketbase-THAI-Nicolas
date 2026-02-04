@@ -7,4 +7,24 @@ interface Props {
 }
 const personne = Astro.props.personne
 ---
-<a href={`/personnes/${personne.id}-${slug(personne.nom ?? "Inconnu")}`}>{personne.nom}</a>
+<a href={`/personnes/${personne.id}-${slug(personne.nom ?? "Inconnu")}`} class="card bg-base-200 shadow-sm hover:shadow-md transition-shadow">
+    <div class="card-body">
+        <h2 class="card-title text-lg">
+            <span>{personne.prenom}</span>
+            <span class="font-bold">{personne.nom}</span>
+        </h2>
+        <div class="flex flex-wrap gap-2 mt-2">
+            {personne.profession && personne.profession.length > 0 && (
+                <div class="badge badge-sm">{personne.profession[0]}</div>
+            )}
+            {personne.nationalite && (
+                <div class="badge badge-outline badge-sm">{personne.nationalite}</div>
+            )}
+        </div>
+        <div class="card-actions justify-end mt-4">
+            <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </div>
+    </div>
+</a>

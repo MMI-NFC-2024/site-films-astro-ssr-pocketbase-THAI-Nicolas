@@ -5,15 +5,32 @@ const personnes = await Astro.locals.pb.collection("personnes").getFullList()
 ---
 
 <Layout titre="Les personnes" description="Page regroupant toutes les personnes">
-    <h1>les personnes</h1>
-    <ul>
-        {
-            personnes.map((personne) => (
-                <li>
-                    <LinkPersonne personne={personne} />
-                </li>
-            ))
-        }
-    </ul>
-    { Astro.locals.pb.authStore.isValid && <a href="/personnes/edit/">Ajouter une nouvelle personne</a> }
+    <div class="max-w-7xl mx-auto px-4 py-16">
+        <div class="flex justify-between items-center mb-12">
+            <div>
+                <h1 class="text-4xl font-bold">Les acteurs</h1>
+                <p class="text-base-content/70 mt-2">Total: {personnes.length} personne{personnes.length > 1 ? 's' : ''}</p>
+            </div>
+            { Astro.locals.pb.authStore.isValid && 
+                <a href="/personnes/edit/" class="btn btn-primary">+ Ajouter une personne</a>
+            }
+        </div>
+        
+        {personnes.length > 0 ? (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {
+                    personnes.map((personne) => (
+                        <LinkPersonne personne={personne} />
+                    ))
+                }
+            </div>
+        ) : (
+            <div class="text-center py-12">
+                <p class="text-base-content/70 text-lg mb-6">Aucune personne pour le moment.</p>
+                {Astro.locals.pb.authStore.isValid && (
+                    <a href="/personnes/edit/" class="btn btn-primary">Ajouter la première personne</a>
+                )}
+            </div>
+        )}
+    </div>
 </Layout>
