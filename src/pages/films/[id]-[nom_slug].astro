@@ -1,10 +1,20 @@
 ---
 import Layout from "../../layouts/Layout.astro"
+import type { FilmsResponse, PersonnesResponse } from "../../pocketbase-types";
 
 const { id } = Astro.params as {
     id:string
 }
-const film = await Astro.locals.pb.collection("films").getOne(id);
+const film = await Astro.locals.pb.collection("films").getOne<
+    FilmsResponse<{
+        realisateurs: PersonnesResponse ;
+        producteurs: PersonnesResponse[];
+        scenaristes: PersonnesResponse[];
+    }>
+>(id, {
+    expand: "realisateurs,producteurs,scenaristes"
+})
+;
 ---
 
 <Layout>
@@ -39,6 +49,37 @@ const film = await Astro.locals.pb.collection("films").getOne(id);
                 )}
                 <a href="/films" class="btn btn-ghost">Voir d'autres films</a>
             </div>
+        </div>
+
+        <div>
+            {film.expand?.realisateurs && (
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-2">Réalisateur</h2>
+                    <p>{film.expand.realisateurs.prenom} {film.expand.realisateurs.nom}</p>
+                </div>
+            )}
+            
+            {film.expand?.producteurs && film.expand.producteurs.length > 0 && (
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-2">Producteur{film.expand.producteurs.length > 1 && "s"}</h2>
+                    <ul class="list-disc list-inside">
+                        {film.expand.producteurs.map(producteur => (
+                            <li>{producteur.prenom} {producteur.nom}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+            
+            {film.expand?.scenaristes && film.expand.scenaristes.length > 0 && (
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-2">Scénariste{film.expand.scenaristes.length > 1 && "s"}</h2>
+                    <ul class="list-disc list-inside">
+                        {film.expand.scenaristes.map(scenariste => (
+                            <li>{scenariste.prenom} {scenariste.nom}</li>
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     </div>
 </Layout>

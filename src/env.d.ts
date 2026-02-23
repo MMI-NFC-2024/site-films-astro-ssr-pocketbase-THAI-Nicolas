@@ -7,3 +7,7 @@ declare global {
     }
   }
 }
+
+interface ImportMetaEnv {
+  readonly POCKETBASE_URL: string;
+}
