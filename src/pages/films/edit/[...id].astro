@@ -46,9 +46,13 @@ const personneListes = await Astro.locals.pb.collection("personnes").getFullList
                     </div>
                 )}
                 
-                <form method="post" class="space-y-6 mt-6">
+                <form method="post" enctype="multipart/form-data" class="space-y-6 mt-6">
                     {id && <input type="hidden" name="id" value={id} />}
                     <input type="hidden" name="user" value={Astro.locals.pb.authStore.record?.id}>
+
+                    <label >Image du film
+                        <input type="file" name="image" >
+                    </label>
 
                     <div class="form-control w-full">
                         <label class="label">
@@ -102,23 +106,21 @@ const personneListes = await Astro.locals.pb.collection("personnes").getFullList
 
                     <div class="form-control w-full">
                         <label class="label">
-                            <span class="label-text font-semibold">Réalisateurs</span>
+                            <span class="label-text font-semibold">Réalisateur</span>
                         </label>
-                        <select name="realisateurs" id="realisateurs" class="select select-bordered w-full h-32">
+                        <select name="realisateurs" id="realisateurs" class="select select-bordered w-full">
+                            <option value="">-- Sélectionner un réalisateur --</option>
                             {
                                 personneListes.map((personne) => (
-                                <option selected={film.realisateurs?.includes(personne.id)} value={personne.id}>
+                                <option selected={film.realisateurs === personne.id} value={personne.id}>
                                     {personne.prenom} {personne.nom}
                                 </option>
                                 ))
                             }
                         </select>
-                        <label class="label">
-                            <span class="label-text-alt">Maintenez Ctrl pour sélectionner plusieurs réalisateurs</span>
-                        </label>
                     </div>
 
-                    <div class="form-control w-full">
+                    <!-- <div class="form-control w-full">
                         <label class="label">
                             <span class="label-text font-semibold">Acteurs</span>
                         </label>
@@ -135,7 +137,7 @@ const personneListes = await Astro.locals.pb.collection("personnes").getFullList
                         <label class="label">
                             <span class="label-text-alt">Maintenez Ctrl pour sélectionner plusieurs acteurs</span>
                         </label>
-                    </div>
+                    </div> -->
 
                     <div class="form-control w-full">
                         <label class="label">

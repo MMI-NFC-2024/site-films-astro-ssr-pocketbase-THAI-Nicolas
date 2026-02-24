@@ -1,6 +1,9 @@
 ---
 import Layout from "../../layouts/Layout.astro"
-import type { FilmsResponse, PersonnesResponse } from "../../pocketbase-types";
+import type { FilmsResponse, PersonnesResponse, RoleResponse } from "../../pocketbase-types";
+import ImgPb from "../../components/ImgPb.astro";
+import { Debug } from "astro:components";
+import LinkPersonne from "../../components/LinkPersonne.astro";
 
 const { id } = Astro.params as {
     id:string
@@ -9,14 +12,17 @@ const film = await Astro.locals.pb.collection("films").getOne<
     FilmsResponse<{
         realisateurs: PersonnesResponse ;
         producteurs: PersonnesResponse[];
-        scenaristes: PersonnesResponse[];
+        acteurs: PersonnesResponse[];
+        role_via_film: RoleResponse<{acteur:PersonnesResponse}>[];
     }>
 >(id, {
-    expand: "realisateurs,producteurs,scenaristes"
+    expand: "realisateurs,producteurs,acteurs,role_via_film.acteur"
 })
 ;
----
 
+
+---
+<!-- <Debug {film} /> -->
 <Layout>
     <div class="max-w-4xl mx-auto px-4 py-16">
         <div class="mb-8">
@@ -26,6 +32,7 @@ const film = await Astro.locals.pb.collection("films").getOne<
         <div class="space-y-8">
             <div>
                 <h1 class="text-5xl font-bold mb-4">{film.titre}</h1>
+                <ImgPb record={film} image={film.image} alt={film.titre} classPicture="w-full h-96 object-cover rounded-lg mb-4" classImg="w-full h-full object-cover rounded-lg" />
                 <div class="flex gap-4 flex-wrap">
                     {film.duree_min && (
                         <div class="badge badge-lg">{film.duree_min} minutes</div>
@@ -46,6 +53,8 @@ const film = await Astro.locals.pb.collection("films").getOne<
             <div class="flex gap-4">
                 {Astro.locals.pb.authStore.record?.id === film.user && (
                     <a href={`/films/edit/${film.id}`} class="btn btn-primary">Modifier le film</a>
+                    <a href={`/films/supp-film/${film.id}`} class="btn btn-primary">Supprimer le film</a>
+                    <a href={`/films/ajout-role/${film.id}`} class="btn btn-primary">Ajouter un rôle</a>
                 )}
                 <a href="/films" class="btn btn-ghost">Voir d'autres films</a>
             </div>
@@ -59,23 +68,30 @@ const film = await Astro.locals.pb.collection("films").getOne<
                 </div>
             )}
             
+            <!-- {film.expand?.acteurs && film.expand.acteurs.length > 0 && (
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold mb-2">Acteur{film.expand.acteurs.length > 1 && "s"}</h2>
+                    <ul class="list-disc list-inside">
+                        {film.expand.acteurs.map(acteur => (
+                            <li>{acteur.prenom} {acteur.nom}</li>
+                        ))}
+                    </ul>
+                </div>
+            )} -->
+
+            
+                {film.expand?.role_via_film?.map((role) => 
+                    <li>
+                        {role.nom} joué par <LinkPersonne personne={role.expand.acteur} />
+                    <li/>
+                )}
+            
             {film.expand?.producteurs && film.expand.producteurs.length > 0 && (
                 <div class="mb-6">
                     <h2 class="text-2xl font-bold mb-2">Producteur{film.expand.producteurs.length > 1 && "s"}</h2>
                     <ul class="list-disc list-inside">
                         {film.expand.producteurs.map(producteur => (
                             <li>{producteur.prenom} {producteur.nom}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            
-            {film.expand?.scenaristes && film.expand.scenaristes.length > 0 && (
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold mb-2">Scénariste{film.expand.scenaristes.length > 1 && "s"}</h2>
-                    <ul class="list-disc list-inside">
-                        {film.expand.scenaristes.map(scenariste => (
-                            <li>{scenariste.prenom} {scenariste.nom}</li>
                         ))}
                     </ul>
                 </div>

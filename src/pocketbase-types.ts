@@ -13,6 +13,7 @@ export enum Collections {
 	Superusers = "_superusers",
 	Films = "films",
 	Personnes = "personnes",
+	Role = "role",
 	Users = "users",
 }
 
@@ -100,6 +101,7 @@ export type FilmsRecord = {
 	date_sortie?: IsoDateString
 	duree_min?: number
 	id: string
+	image?: FileNameString
 	producteurs?: RecordIdString[]
 	realisateurs?: RecordIdString
 	synopsis?: string
@@ -135,6 +137,15 @@ export type PersonnesRecord = {
 	user: RecordIdString
 }
 
+export type RoleRecord = {
+	acteur?: RecordIdString
+	created: IsoAutoDateString
+	id: string
+	nom?: string
+	updated: IsoAutoDateString
+	user?: RecordIdString
+}
+
 export type UsersRecord = {
 	avatar?: FileNameString
 	created: IsoAutoDateString
@@ -156,6 +167,7 @@ export type OtpsResponse<Texpand = unknown> = Required<OtpsRecord> & BaseSystemF
 export type SuperusersResponse<Texpand = unknown> = Required<SuperusersRecord> & AuthSystemFields<Texpand>
 export type FilmsResponse<Texpand = unknown> = Required<FilmsRecord> & BaseSystemFields<Texpand>
 export type PersonnesResponse<Texpand = unknown> = Required<PersonnesRecord> & BaseSystemFields<Texpand>
+export type RoleResponse<Texpand = unknown> = Required<RoleRecord> & BaseSystemFields<Texpand>
 export type UsersResponse<Texpand = unknown> = Required<UsersRecord> & AuthSystemFields<Texpand>
 
 // Types containing all Records and Responses, useful for creating typing helper functions
@@ -168,6 +180,7 @@ export type CollectionRecords = {
 	_superusers: SuperusersRecord
 	films: FilmsRecord
 	personnes: PersonnesRecord
+	role: RoleRecord
 	users: UsersRecord
 }
 
@@ -179,6 +192,7 @@ export type CollectionResponses = {
 	_superusers: SuperusersResponse
 	films: FilmsResponse
 	personnes: PersonnesResponse
+	role: RoleResponse
 	users: UsersResponse
 }
 
