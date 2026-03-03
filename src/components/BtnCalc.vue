@@ -8,7 +8,13 @@ const nombre = defineModel<number>();
 </script>
 
 <template>
-  <button @click="nombre = !modeDecimal ? (nombre! * 10 + chiffre) : ">
+  <button
+    @click="
+      nombre = !modeDecimal
+        ? nombre! * 10 + chiffre
+        : nombre! + chiffre * Math.pow(0.1, rang)
+    "
+  >
     {{ chiffre }}
   </button>
 </template>
