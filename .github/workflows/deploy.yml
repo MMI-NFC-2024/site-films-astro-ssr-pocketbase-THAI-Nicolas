@@ -1,0 +1,46 @@
+name: Build and Deploy Films(OVH SSR)
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: 📦 Install and Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: 📂 Deploy to VPS (RSYNC)
+        uses: easingthemes/ssh-deploy@v5.1.0
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          SOURCE: "."
+          TARGET: "/var/www/films" # <--- Mis à jour ici
+          ARGS: "-rlgoDvc --delete"
+          EXCLUDE: "/.git*, /node_modules/, /src/, /films_pb/" # On ignore le dossier de la DB
+
+      - name: 🔄 Restart Application via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/films # <--- Mis à jour ici
+            npm install --omit=dev
+            # Lancement sur le port 4322
+            PORT=4322 pm2 restart films|| PORT=4322 pm2 start dist/server/entry.mjs --name films
