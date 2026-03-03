@@ -45,4 +45,4 @@ jobs:
             cd /var/www/films # <--- Mis à jour ici
             npm install --omit=dev
             # Lancement sur le port 4322
-            PORT=4322 pm2 restart films|| PORT=4322 pm2 start dist/server/entry.mjs --name films
+            PORT=4322 POCKETBASE_URL=${{ secrets.POCKETBASE_URL }} pm2 restart films --update-env || PORT=4322 POCKETBASE_URL=${{ secrets.POCKETBASE_URL }} pm2 start dist/server/entry.mjs --name films
