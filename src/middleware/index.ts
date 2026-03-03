@@ -5,7 +5,8 @@ import { defineMiddleware } from "astro/middleware";
 
 export const onRequest = defineMiddleware(
   async ({ locals, request, isPrerendered }: any, next: () => any) => {
-    locals.pb = new PocketBase(import.meta.env.POCKETBASE_URL);
+    const pbUrl = process.env.POCKETBASE_URL ?? import.meta.env.POCKETBASE_URL;
+    locals.pb = new PocketBase(pbUrl);
 
     // load the store data from the request cookie string
     if (!isPrerendered) {
