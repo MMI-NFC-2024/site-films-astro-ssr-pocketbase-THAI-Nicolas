@@ -1,8 +1,10 @@
 ---
+import SelectPersonnes from "../../../components/SelectPersonnes.vue";
 import Layout from "../../../layouts/Layout.astro"
 import type { FilmsResponse } from "../../../pocketbase-types";
 import { formatDate } from "../../../utilitaires";
 import slug from "slug";
+
 
 const { id } = Astro.params;
 let message = null;
@@ -108,7 +110,8 @@ const personneListes = await Astro.locals.pb.collection("personnes").getFullList
                         <label class="label">
                             <span class="label-text font-semibold">Réalisateur</span>
                         </label>
-                        <select name="realisateurs" id="realisateurs" class="select select-bordered w-full">
+                        <SelectPersonnes placeholder="Selectionner un réalisateur" name="realisateurs" personnes={personneListes} value={film.realisateurs} client:load/>
+                        <!-- <select name="realisateurs" id="realisateurs" class="select select-bordered w-full">
                             <option value="">-- Sélectionner un réalisateur --</option>
                             {
                                 personneListes.map((personne) => (
@@ -117,7 +120,7 @@ const personneListes = await Astro.locals.pb.collection("personnes").getFullList
                                 </option>
                                 ))
                             }
-                        </select>
+                        </select> -->
                     </div>
 
                     <!-- <div class="form-control w-full">
@@ -143,7 +146,8 @@ const personneListes = await Astro.locals.pb.collection("personnes").getFullList
                         <label class="label">
                             <span class="label-text font-semibold">Producteurs</span>
                         </label>
-                        <select name="producteurs" multiple class="select select-bordered w-full h-32">
+                        <SelectPersonnes multiple placeholder="Selectionner un ou des producteur(s)" name="producteurs" personnes={personneListes} value={film.producteurs} client:load/>
+                        <!-- <select name="producteurs" multiple class="select select-bordered w-full h-32">
                             {
                                 personneListes.map((personne) => (
                                     <option selected={film.producteurs?.includes(personne.id)} 
@@ -152,7 +156,7 @@ const personneListes = await Astro.locals.pb.collection("personnes").getFullList
                                         {personne.prenom} {personne.nom}
                                     </option>
                                 ))}
-                        </select>
+                        </select> -->
                         <label class="label">
                             <span class="label-text-alt">Maintenez Ctrl pour sélectionner plusieurs producteurs</span>
                         </label>
