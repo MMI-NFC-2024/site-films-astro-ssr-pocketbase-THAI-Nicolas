@@ -18,6 +18,8 @@ jobs:
           cache: "npm"
 
       - name: 📦 Install and Build
+        env:
+          POCKETBASE_URL: ${{ secrets.POCKETBASE_URL }}
         run: |
           npm ci
           npm run build
